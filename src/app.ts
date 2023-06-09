@@ -40,6 +40,33 @@ function validate(validateableObj: Validateable){
     }
     return isValid;
 }
+// Project List
+class ProjectList {
+    projectElem: HTMLTemplateElement;
+    hostElem: HTMLDivElement;
+    elem: HTMLElement;
+    constructor(private type:'active'|'finished'){
+        this.projectElem = document.getElementById('project-list')! as HTMLTemplateElement;
+        this.hostElem = document.getElementById('app')! as HTMLDivElement;
+        // reference to child of template element
+        const importedNode = document.importNode(this.projectElem.content,true);
+        this.elem = importedNode.firstElementChild as HTMLElement;
+        this.elem.id = `${this.type}-projects`;
+
+        // render form inside app div
+        this.attach();
+        // fill the content
+        this.renderContent();
+    }
+    private attach(){
+        this.hostElem.insertAdjacentElement('beforeend',this.elem);
+    }
+    private renderContent(){
+        this.elem.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
+        this.elem.querySelector('ul')!.id = `${this.type}-projects-list`;
+    }
+}
+// Project Input
 class ProjectInput {
     projectElem: HTMLTemplateElement;
     hostElem: HTMLDivElement;
@@ -113,3 +140,5 @@ class ProjectInput {
     }
 }
 const prjEle = new ProjectInput();
+const activeList = new ProjectList('active');
+const finishedList = new ProjectList('finished');
