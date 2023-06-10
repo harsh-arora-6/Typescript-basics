@@ -95,7 +95,25 @@ abstract class Component<T extends HTMLElement,U extends HTMLElement>{
         this.hostElem.insertAdjacentElement(insertAtStart?'afterbegin':'beforeend',this.elem);
     }
     abstract configure():void;
+    abstract renderContent():void;
 
+}
+// Project Item to render in project list
+class ProjectItem extends Component<HTMLUListElement,HTMLLIElement>{
+    private project:Project;
+    constructor(hostId:string,project:Project){
+        super('single-project',hostId,false,project.id);
+        this.project = project;
+        this.renderContent();
+    }
+    configure(): void {
+        
+    }
+    renderContent():void{
+        this.elem.querySelector('h1')!.textContent = this.project.title;
+        this.elem.querySelector('h2')!.textContent = this.project.people.toString();
+        this.elem.querySelector('p')!.textContent = this.project.description;
+    }
 }
 // Project List
 class ProjectList extends Component<HTMLDivElement,HTMLElement> {
@@ -119,19 +137,21 @@ class ProjectList extends Component<HTMLDivElement,HTMLElement> {
             this.renderProjects();
         })
     }
+    renderContent(){
+        this.elem.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
+        this.elem.querySelector('ul')!.id = `${this.type}-projects-list`;
+    }
     private renderProjects(){
         const list = document.getElementById(`${this.type}-projects-list`)!;
         list.innerHTML = '';
         for(const project of this.assignedProjects){
-            const listItem = document.createElement('li');
-            listItem.textContent = project.title;
-            list.appendChild(listItem);
+            // const listItem = document.createElement('li');
+            // listItem.textContent = project.title;
+            // list.appendChild(listItem);
+            new ProjectItem(list.id,project);
         }
     }
-    private renderContent(){
-        this.elem.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
-        this.elem.querySelector('ul')!.id = `${this.type}-projects-list`;
-    }
+    
 }
 // Project Input
 class ProjectInput extends Component<HTMLInputElement,HTMLInputElement>{
@@ -152,6 +172,9 @@ class ProjectInput extends Component<HTMLInputElement,HTMLInputElement>{
     }
     configure(){
         this.elem.addEventListener('submit',this.submitHandler);
+    }
+    renderContent(): void {
+        
     }
     private gatherInput():[string,string,number]|void{
         const title = this.titleEle.value;
