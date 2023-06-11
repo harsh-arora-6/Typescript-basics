@@ -101,6 +101,13 @@ abstract class Component<T extends HTMLElement,U extends HTMLElement>{
 // Project Item to render in project list
 class ProjectItem extends Component<HTMLUListElement,HTMLLIElement>{
     private project:Project;
+    get persons(){
+        if(this.project.people === 1){
+            return '1 person';
+        }else{
+            return `${this.project.people} persons`;
+        }
+    }
     constructor(hostId:string,project:Project){
         super('single-project',hostId,false,project.id);
         this.project = project;
@@ -110,8 +117,8 @@ class ProjectItem extends Component<HTMLUListElement,HTMLLIElement>{
         
     }
     renderContent():void{
-        this.elem.querySelector('h1')!.textContent = this.project.title;
-        this.elem.querySelector('h2')!.textContent = this.project.people.toString();
+        this.elem.querySelector('h2')!.textContent = this.project.title;
+        this.elem.querySelector('h3')!.textContent = this.persons + ' assigned';
         this.elem.querySelector('p')!.textContent = this.project.description;
     }
 }
@@ -193,7 +200,7 @@ class ProjectInput extends Component<HTMLInputElement,HTMLInputElement>{
         const validatablePeople :Validateable = {
             value: +people,
             required:true,
-            min:1,
+            min:0,
             max:5
         }
         if(!validate(validatableTitle) || !validate(validatableDescription) || !validate(validatablePeople)){
