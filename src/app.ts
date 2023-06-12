@@ -1,5 +1,9 @@
 // Code goes here!
-// create a decorator to auto bind the submit handler to 'this'
+// importing namespaces
+/// <reference path="drag-drop-interfaces.ts" />
+/// <reference path="project-model.ts" />  
+namespace App{
+    // create a decorator to auto bind the submit handler to 'this'
 // first parameter is target,second is methodName but we used _ to begin the parameter name as we don't have any use of them and we want typescript to 
 // not give any error or we can set noUnusedParameters to false in tsconfig.json
 function autobind(_:any,_2:string,descriptor:PropertyDescriptor){
@@ -40,22 +44,8 @@ function validate(validateableObj: Validateable){
     }
     return isValid;
 }
-// Drag and drop interfaces
-interface Draggable {
-    dragStartHandler(event : DragEvent):void;
-    dragEndHandler(event: DragEvent):void;
-}
-interface DragTarget {
-    dragOverHandler(event: DragEvent):void;
-    dropHandler(event: DragEvent):void;
-    dragLeaveHandler(event: DragEvent):void;
-}
-// whether active project or finished project
-enum ProjectStatus {Active , Finished}
-class Project {
-    // shorthand initialization
-    constructor(public id:string,public title:string,public description:string,public people:number,public status:ProjectStatus){}
-}
+
+
 type Listener<T> = (projects:T[])=>void
 class State<T>{
     // protected so that we can access it from inheriting class
@@ -283,6 +273,7 @@ class ProjectInput extends Component<HTMLInputElement,HTMLInputElement>{
     }
     
 }
-const prjEle = new ProjectInput();
-const activeList = new ProjectList('active');
-const finishedList = new ProjectList('finished');
+new ProjectInput();
+new ProjectList('active');
+new ProjectList('finished');
+}
