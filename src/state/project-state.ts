@@ -1,4 +1,4 @@
-namespace App {
+import { Project,ProjectStatus } from "../models/project-model.js";
     type Listener<T> = (projects:T[])=>void
     class State<T>{
         // protected so that we can access it from inheriting class
@@ -41,4 +41,3 @@ namespace App {
         }
     }
     export const projectState = ProjectState.getInstance();
-}
