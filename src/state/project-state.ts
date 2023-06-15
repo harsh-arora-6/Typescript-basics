@@ -1,4 +1,4 @@
-import { Project,ProjectStatus } from "../models/project-model.js";
+import { Project,ProjectStatus } from "../models/project-model";
     type Listener<T> = (projects:T[])=>void
     class State<T>{
         // protected so that we can access it from inheriting class
